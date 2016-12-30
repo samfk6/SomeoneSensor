@@ -86,7 +86,7 @@ def train(report_steps):
     pred = conv_net_model(x, weights, biases, keep_prob)
 
     # Define loss and optimizer
-    cost = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(pred, y))
+    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))
     optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
     # Evaluate model
@@ -94,9 +94,9 @@ def train(report_steps):
     accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
     # Initializing the variables
-    init = tf.initialize_all_variables()
+    init = tf.global_variables_initializer()
     # saver init
-    saver = tf.train.Saver(tf.all_variables())
+    saver = tf.train.Saver(tf.global_variables())
     
     with tf.Session() as sess:
         sess.run(init)

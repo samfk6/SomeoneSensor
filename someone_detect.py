@@ -121,10 +121,10 @@ def detect():
         # images, labels = extract_data('./data/')
         # test_batch_x , test_batch_y = batch_data(30, images, labels) 
         # result ,result2= sess.run([ans,ans_co], feed_dict = {x: test_batch_x, y: test_batch_y , keep_prob: 1} )
-
+        tmp = 0
         while True:
             ret, frame = capture.read()
-            frame = cv2.resize(frame,(320, 240))
+            # frame = cv2.resize(frame,(320, 240))
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
             # a = cv2.resize(frame,(64, 64))
@@ -132,7 +132,7 @@ def detect():
             # a = np.reshape(a, [-1 , 64, 64, 3])
             # a = a /255.
 
-            face = face_cascade.detectMultiScale(gray,1.1,10)
+            face = face_cascade.detectMultiScale(gray,1.1,5)
 
             # img = cv2.imread("./data/boss/2.bmp")
             # img = cv2.resize(img,(64, 64))
@@ -141,6 +141,7 @@ def detect():
             # img = img /255.
 
             for (x1,y1,w,h) in face:
+
                 roi = frame[y1:y1+h, x1:x1+w]
                 cv2.rectangle(frame,(x1,y1),(x1+w,y1+h),(255,0,0),2)
                 # cv2.imwrite( TARGET_DIR + str(tmp)+".bmp", roi )
@@ -151,11 +152,21 @@ def detect():
                 result = sess.run(ans, feed_dict = {x: roi,  keep_prob: 1} )
                 print result[0]
 
+                pre_tmp = result[0]
                 if result[0] == 1:  # boss
-                    print('Boss is approaching')
-                    show_image()
+                    tmp = tmp + 1
+
+                    if tmp > 2:
+                            print('Boss is approaching')
+                            tmp = 0
+                            show_image()
                 else:
                     print('Not boss')
+                    tmp = 0
+                
+                print ("TMP:" + str(tmp))
+
+
 
             cv2.imshow('frame',frame)
             

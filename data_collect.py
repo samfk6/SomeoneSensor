@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import cv2
 import os
+import time
 
 TARGET_DIR = "out/"
 
@@ -14,12 +15,12 @@ while True:
     ret, frame = capture.read()
     
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    face = face_cascade.detectMultiScale(gray,1.1,10)
+    face = face_cascade.detectMultiScale(gray,1.1,3)
 
     for (x,y,w,h) in face:
     	roi = frame[y:y+h, x:x+w]
-	cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
-	cv2.imwrite( TARGET_DIR + str(tmp)+".bmp", roi )
+	cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,0),2)
+	cv2.imwrite( TARGET_DIR + str(time.time()) +str(tmp)+".bmp", roi )
 	tmp = tmp + 1
 
     cv2.imshow('frame',frame)
