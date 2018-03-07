@@ -6,7 +6,8 @@ import random
 import cv2
 import numpy as np
 import tensorflow as tf
-from image_show import show_image
+import sys
+
 from data_input import extract_data, resize_with_pad, IMAGE_SIZE
 
 
@@ -121,6 +122,8 @@ def detect():
         # images, labels = extract_data('./data/')
         # test_batch_x , test_batch_y = batch_data(30, images, labels) 
         # result ,result2= sess.run([ans,ans_co], feed_dict = {x: test_batch_x, y: test_batch_y , keep_prob: 1} )
+        img = cv2.imread('work.png')
+
         tmp = 0
         while True:
             ret, frame = capture.read()
@@ -159,7 +162,13 @@ def detect():
                     if tmp > 2:
                             print('Boss is approaching')
                             tmp = 0
-                            show_image()
+                            # show_image()
+                            cv2.namedWindow("window", cv2.WND_PROP_FULLSCREEN)
+                            cv2.setWindowProperty("window",cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
+
+                            cv2.imshow('window',img)
+                            cv2.waitKey(0)
+                            sys.exit()
                 else:
                     print('Not boss')
                     tmp = 0
@@ -168,10 +177,10 @@ def detect():
 
 
 
-            cv2.imshow('frame',frame)
+            # cv2.imshow('frame',frame)
             
-            if cv2.waitKey(10) == 27:
-                break
+            # if cv2.waitKey(10) == 27:
+            #     break
             
         capture.release()
         cv2.destroyAllWindows()
